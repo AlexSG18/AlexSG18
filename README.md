@@ -1,16 +1,43 @@
-## Hi there 👋
+# Hi, I'm Alex 👋
 
-<!--
-**AlexSG18/AlexSG18** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+### Computer Vision & Machine Learning Engineer
 
-Here are some ideas to get you started:
+I build and ship deep-learning systems for real-world image understanding — object
+detection, segmentation, and OCR — along with the APIs that serve them in production.
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+- 🔭 Working on production computer-vision pipelines: object detection, image
+  segmentation, and model-serving APIs.
+- 🧠 Day-to-day stack: **PyTorch**, the **YOLO / Ultralytics** ecosystem, and applied **Gen-AI**.
+- 📫 How to reach me: see links below.
+
+---
+
+## 🛠️ Tech & Tools
+
+**Languages:** Python · SQL
+**ML / CV:** PyTorch · YOLO · Ultralytics · OpenCV · Image Segmentation (SAM) · OCR · scikit-learn
+**Gen-AI / LLMs:** LLM-based classification · prompt engineering · multimodal pipelines
+**Engineering:** REST APIs · Jupyter · Git
+
+---
+
+## 📌 Featured Projects
+
+- **[Language Identification using OCR](https://github.com/AlexSG18/Language-Identification-Using-OCR)**
+  Detects the language of a paragraph from an image using OCR. *(Python · Jupyter)*
+
+- **[Handwritten Digit Recognition](https://github.com/AlexSG18/Assignment1)**
+  A neural network for MNIST-style handwritten-digit classification. *(Python)*
+
+- **[Insect Detection](https://github.com/AlexSG18/FrotiersInEcology)**
+  Insect detection from imagery using classical image processing. *(Python)*
+
+- **[News Aggregator](https://github.com/AlexSG18/News-Aggregator)**
+  Scrapes news, classifies articles by topic, and visualizes word frequencies. *(Python · SQL)*
+
+---
+
+## 🤝 Connect
+
+- 💼 [LinkedIn](https://www.linkedin.com/in/alex-gerovich/)
+- 📧 [alexsg18.ag@gmail.com](mailto:alexsg18.ag@gmail.com)
