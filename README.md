@@ -44,9 +44,7 @@ detection, segmentation, and OCR — along with the APIs that serve them in prod
 
 ## 📊 Most Used Languages
 
-<p align="center">
-  <img height="165" src="https://github-readme-stats.vercel.app/api/top-langs/?username=AlexSG18&layout=compact&langs_count=8&hide_border=true&theme=tokyonight&hide=jupyter%20notebook" alt="Top languages" />
-</p>
+  <img height="165" src="https://github-readme-stats.vercel.app/api/top-langs/?username=AlexSG18&layout=compact&langs_count=8&hide_border=true&theme=tokyonight&hide=jupyter%20notebook&hide_title=true" alt="Top languages" />
 
 ---
 
