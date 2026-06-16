@@ -14,10 +14,15 @@ detection, segmentation, and OCR — along with the APIs that serve them in prod
 
 ## 🛠️ Tech & Tools
 
-**Languages:** Python · SQL<br>
-**ML / CV:** PyTorch · YOLO · Ultralytics · OpenCV · Image Segmentation (SAM) · OCR · scikit-learn<br>
-**Gen-AI / LLMs:** LLM-based classification · prompt engineering · multimodal pipelines<br>
-**Engineering:** REST APIs · Jupyter · Git
+![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
+![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white)
+![OpenCV](https://img.shields.io/badge/OpenCV-5C3EE8?style=flat-square&logo=opencv&logoColor=white)
+![scikit-learn](https://img.shields.io/badge/scikit--learn-F7931E?style=flat-square&logo=scikit-learn&logoColor=white)
+![Jupyter](https://img.shields.io/badge/Jupyter-F37626?style=flat-square&logo=jupyter&logoColor=white)
+![SQL](https://img.shields.io/badge/SQL-4479A1?style=flat-square)
+![Git](https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white)
+
+**Focus areas:** Object Detection (YOLO / Ultralytics) · Image Segmentation (SAM) · OCR · LLM-based Classification · Multimodal Pipelines · REST APIs
 
 ---
 
@@ -37,7 +42,16 @@ detection, segmentation, and OCR — along with the APIs that serve them in prod
 
 ---
 
+## 📊 GitHub Stats
+
+<p align="center">
+  <img height="165" src="https://github-readme-stats.vercel.app/api?username=AlexSG18&show_icons=true&count_private=true&hide_border=true&theme=tokyonight" alt="GitHub stats" />
+  <img height="165" src="https://github-readme-stats.vercel.app/api/top-langs/?username=AlexSG18&layout=compact&langs_count=8&hide_border=true&theme=tokyonight&hide=jupyter%20notebook" alt="Top languages" />
+</p>
+
+---
+
 ## 🤝 Connect
 
-- 💼 [LinkedIn](https://www.linkedin.com/in/alex-gerovich/)
-- 📧 [alexsg18.ag@gmail.com](mailto:alexsg18.ag@gmail.com)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/alex-gerovich/)
+[![Gmail](https://img.shields.io/badge/Gmail-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:alexsg18.ag@gmail.com)
