@@ -14,9 +14,9 @@ detection, segmentation, and OCR — along with the APIs that serve them in prod
 
 ## 🛠️ Tech & Tools
 
-**Languages:** Python · SQL
-**ML / CV:** PyTorch · YOLO · Ultralytics · OpenCV · Image Segmentation (SAM) · OCR · scikit-learn
-**Gen-AI / LLMs:** LLM-based classification · prompt engineering · multimodal pipelines
+**Languages:** Python · SQL<br>
+**ML / CV:** PyTorch · YOLO · Ultralytics · OpenCV · Image Segmentation (SAM) · OCR · scikit-learn<br>
+**Gen-AI / LLMs:** LLM-based classification · prompt engineering · multimodal pipelines<br>
 **Engineering:** REST APIs · Jupyter · Git
 
 ---
