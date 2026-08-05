@@ -75,19 +75,27 @@ def plot_conversion_by_category(df: pd.DataFrame) -> None:
     )
 
     for col in cat_cols:
-        rate = (
+        # Positive rate (%) and group size (n) per category
+        grp = (
             df.assign(_pos=(df[TARGET] == POSITIVE))
             .groupby(col, observed=True)["_pos"]
-            .mean()
-            .mul(100)
-            .sort_values(ascending=False)
+            .agg(rate="mean", n="size")
         )
-        fig, ax = plt.subplots(figsize=(7, 0.45 * len(rate) + 1.5))
-        sns.barplot(x=rate.values, y=rate.index, ax=ax)
+        grp["rate"] = grp["rate"] * 100
+        grp = grp.sort_values("rate", ascending=False)
+
+        fig, ax = plt.subplots(figsize=(7, 0.45 * len(grp) + 1.5))
+        sns.barplot(x=grp["rate"].values, y=grp.index, ax=ax)
         ax.axvline(baseline * 100, color="red", ls="--",
                    label=f"baseline {baseline*100:.1f}%")  # overall positive rate
+
+        # Annotate each bar with its sample size — a high rate on tiny n is noise
+        for i, (rate, n) in enumerate(zip(grp["rate"], grp["n"])):
+            ax.text(rate + 0.2, i, f"n={n:,}", va="center", fontsize=9, color="dimgray")
+
         ax.set_title(f"Conversion rate by '{col}'")
         ax.set_xlabel("subscribed (%)")
+        ax.margins(x=0.15)  # extra room on the right for the n= labels
         ax.legend()
         _finish(fig, f"02_conv_{col}")
 
