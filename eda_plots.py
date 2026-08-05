@@ -25,7 +25,10 @@ DATA_PATH = Path(
 SEP = ";"
 TARGET = "y"
 POSITIVE = "yes"
-OUT_DIR = Path(__file__).resolve().parent / "eda_plots"  # where PNGs are saved
+# Where PNGs are saved: an 'eda_plots' folder under the project source dir
+OUT_DIR = Path(
+    r"C:\Users\HDTeam\PycharmProjects\bank_marketing\src\back_marketing"
+) / "eda_plots"
 SHOW = True      # open chart windows (set False to only save files)
 SAVE = True      # save PNG files
 
@@ -40,7 +43,7 @@ def _finish(fig, name: str) -> None:
     # Save and/or show a finished figure, then free memory
     fig.tight_layout()
     if SAVE:
-        OUT_DIR.mkdir(exist_ok=True)
+        OUT_DIR.mkdir(parents=True, exist_ok=True)
         fig.savefig(OUT_DIR / f"{name}.png", dpi=120)
         print(f"saved: {OUT_DIR / f'{name}.png'}")
     if SHOW:
