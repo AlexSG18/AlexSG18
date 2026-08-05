@@ -1,20 +1,31 @@
 """
 eda.py — understand the data before modeling.
 
-Usage:
-    python eda.py --data path/to/data.csv --target loan
+Loads the dataset directly (like the original script) and prints a full
+overview: shape, dtypes, missing values, target balance, numeric/categorical
+summaries and numeric-vs-target correlation.
 
-Column-agnostic: auto-detects numeric vs categorical and prints a full overview.
+Usage:
+    python eda.py
 """
 
-import argparse
+from pathlib import Path
 import pandas as pd
 
+# --- Settings (edit here) ---
+DATA_PATH = Path(
+    r"C:\Users\HDTeam\PycharmProjects\bank_marketing\src\data\bank-additional-full.csv"
+)
+SEP = ";"          # UCI bank file is semicolon-separated
+TARGET = "y"       # target column: did the client subscribe
 
-def load_data(path: str, sep: str) -> pd.DataFrame:
-    # Read CSV with the given separator (UCI bank uses ';')
-    df = pd.read_csv(path, sep=sep)
-    return df
+pd.set_option("display.max_columns", None)
+pd.set_option("display.width", 120)
+
+
+def load_data() -> pd.DataFrame:
+    # Read the dataset from the fixed path above
+    return pd.read_csv(DATA_PATH, sep=SEP)
 
 
 def overview(df: pd.DataFrame) -> None:
@@ -39,24 +50,24 @@ def overview(df: pd.DataFrame) -> None:
     print(f"{df.duplicated().sum():,}")
 
 
-def split_columns(df: pd.DataFrame, target: str):
+def split_columns(df: pd.DataFrame):
     # Separate features into numeric vs categorical (target excluded)
-    features = [c for c in df.columns if c != target]
+    features = [c for c in df.columns if c != TARGET]
     numeric = df[features].select_dtypes(include="number").columns.tolist()
     categorical = [c for c in features if c not in numeric]
     return numeric, categorical
 
 
-def target_report(df: pd.DataFrame, target: str) -> None:
+def target_report(df: pd.DataFrame) -> None:
     # Class distribution + imbalance warning (key for loan/subscription problems)
-    if target not in df.columns:
-        print(f"\n[!] target column '{target}' not found — skipping target report.")
+    if TARGET not in df.columns:
+        print(f"\n[!] target column '{TARGET}' not found — skipping target report.")
         return
     print("\n" + "=" * 60)
-    print(f"TARGET: '{target}'")
+    print(f"TARGET: '{TARGET}'")
     print("=" * 60)
-    counts = df[target].value_counts(dropna=False)
-    pct = df[target].value_counts(normalize=True, dropna=False).mul(100).round(2)
+    counts = df[TARGET].value_counts(dropna=False)
+    pct = df[TARGET].value_counts(normalize=True, dropna=False).mul(100).round(2)
     print(pd.DataFrame({"count": counts, "pct": pct}))
     if len(counts) == 2:  # binary target -> report minority share
         minority = pct.min()
@@ -73,8 +84,7 @@ def numeric_report(df: pd.DataFrame, numeric) -> None:
     print("\n" + "=" * 60)
     print("NUMERIC FEATURES — describe")
     print("=" * 60)
-    with pd.option_context("display.max_columns", None, "display.width", 200):
-        print(df[numeric].describe().T)
+    print(df[numeric].describe().T)
 
 
 def categorical_report(df: pd.DataFrame, categorical, top: int = 10) -> None:
@@ -90,11 +100,11 @@ def categorical_report(df: pd.DataFrame, categorical, top: int = 10) -> None:
         print(df[col].value_counts(dropna=False).head(top))
 
 
-def target_correlation(df: pd.DataFrame, numeric, target: str) -> None:
+def target_correlation(df: pd.DataFrame, numeric) -> None:
     # Correlation of numeric features with the target (binary/numeric only)
-    if target not in df.columns or not numeric:
+    if TARGET not in df.columns or not numeric:
         return
-    y = df[target]
+    y = df[TARGET]
     if y.dtype == object:
         # Map a textual binary target (yes/no, true/false) to 0/1
         uniq = set(str(v).lower() for v in y.dropna().unique())
@@ -114,23 +124,16 @@ def target_correlation(df: pd.DataFrame, numeric, target: str) -> None:
 
 
 def main():
-    # CLI args: data path, target column name, CSV separator
-    parser = argparse.ArgumentParser(description="EDA for bank loan-prediction data")
-    parser.add_argument("--data", required=True, help="path to CSV file")
-    parser.add_argument("--target", default="loan", help="name of the target column")
-    parser.add_argument("--sep", default=",", help="CSV separator (UCI bank uses ';')")
-    args = parser.parse_args()
-
-    df = load_data(args.data, args.sep)
+    df = load_data()
     overview(df)
 
-    numeric, categorical = split_columns(df, args.target)
+    numeric, categorical = split_columns(df)
     print(f"\nDetected {len(numeric)} numeric and {len(categorical)} categorical features.")
 
-    target_report(df, args.target)
+    target_report(df)
     numeric_report(df, numeric)
     categorical_report(df, categorical)
-    target_correlation(df, numeric, args.target)
+    target_correlation(df, numeric)
 
 
 if __name__ == "__main__":
