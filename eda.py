@@ -104,22 +104,24 @@ def target_correlation(df: pd.DataFrame, numeric) -> None:
     # Correlation of numeric features with the target (binary/numeric only)
     if TARGET not in df.columns or not numeric:
         return
+
+    # Convert a textual binary target (yes/no, true/false) to numeric 0/1.
+    # Check "is numeric" rather than == object, to also catch str/string dtypes.
     y = df[TARGET]
-    if y.dtype == object:
-        # Map a textual binary target (yes/no, true/false) to 0/1
-        uniq = set(str(v).lower() for v in y.dropna().unique())
-        mapping = None
-        if uniq <= {"yes", "no"}:
-            mapping = {"yes": 1, "no": 0}
-        elif uniq <= {"true", "false"}:
-            mapping = {"true": 1, "false": 0}
-        if mapping is None:  # not a simple binary target -> skip
-            return
-        y = y.str.lower().map(mapping)
+    if not pd.api.types.is_numeric_dtype(y):
+        y = (y.astype(str).str.strip().str.lower()
+             .map({"yes": 1, "no": 0, "true": 1, "false": 0}))
+
+    y = pd.to_numeric(y, errors="coerce")  # anything non-binary becomes NaN
+    if y.isna().all():                     # target isn't a simple binary -> skip safely
+        print("\n(target is not binary yes/no — skipping correlation)")
+        return
+
     print("\n" + "=" * 60)
     print("Correlation of numeric features with target")
     print("=" * 60)
-    corr = df[numeric].apply(lambda c: c.corr(y)).sort_values(key=abs, ascending=False)
+    # corrwith handles the numeric-vs-target correlation without per-column apply
+    corr = df[numeric].corrwith(y).sort_values(key=abs, ascending=False)
     print(corr.round(3))
 
 
