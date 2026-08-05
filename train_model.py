@@ -15,6 +15,7 @@ Usage:
 from pathlib import Path
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
@@ -24,6 +25,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import (
     classification_report, confusion_matrix,
     roc_auc_score, average_precision_score,
+    RocCurveDisplay, PrecisionRecallDisplay, ConfusionMatrixDisplay,
 )
 
 # --- Settings (edit here) ---
@@ -34,6 +36,12 @@ SEP = ";"
 TARGET = "y"
 TEST_SIZE = 0.2
 RANDOM_STATE = 42
+
+# Where evaluation plots are saved
+PLOT_DIR = Path(
+    r"C:\Users\HDTeam\PycharmProjects\bank_marketing\src\back_marketing"
+) / "model_plots"
+SHOW_PLOTS = True   # open chart windows too (set False to only save)
 
 pd.set_option("display.max_columns", None)
 pd.set_option("display.width", 120)
@@ -115,6 +123,45 @@ def show_top_features(pipe: Pipeline, top: int = 15) -> None:
     print(s.head(top).round(3))
 
 
+def save_plots(pipe: Pipeline, X_test, y_test) -> None:
+    # Save ROC curve, Precision-Recall curve and confusion matrix as PNGs
+    PLOT_DIR.mkdir(parents=True, exist_ok=True)
+    y_proba = pipe.predict_proba(X_test)[:, 1]
+
+    # 1) ROC curve — true-positive vs false-positive rate across thresholds
+    fig, ax = plt.subplots(figsize=(5, 4))
+    RocCurveDisplay.from_predictions(y_test, y_proba, ax=ax)
+    ax.plot([0, 1], [0, 1], "k--", lw=1)  # random-guess reference
+    ax.set_title("ROC curve")
+    fig.tight_layout()
+    fig.savefig(PLOT_DIR / "roc_curve.png", dpi=120)
+
+    # 2) Precision-Recall curve — the key view under class imbalance
+    fig, ax = plt.subplots(figsize=(5, 4))
+    PrecisionRecallDisplay.from_predictions(y_test, y_proba, ax=ax)
+    ax.axhline(y_test.mean(), color="red", ls="--",
+               label=f"baseline {y_test.mean():.3f}")  # positive rate
+    ax.set_title("Precision-Recall curve")
+    ax.legend()
+    fig.tight_layout()
+    fig.savefig(PLOT_DIR / "pr_curve.png", dpi=120)
+
+    # 3) Confusion matrix at the default 0.5 threshold
+    fig, ax = plt.subplots(figsize=(5, 4))
+    ConfusionMatrixDisplay.from_predictions(
+        y_test, pipe.predict(X_test), display_labels=["no", "yes"],
+        cmap="Blues", ax=ax,
+    )
+    ax.set_title("Confusion matrix")
+    fig.tight_layout()
+    fig.savefig(PLOT_DIR / "confusion_matrix.png", dpi=120)
+
+    print(f"\nPlots saved to: {PLOT_DIR}")
+    if SHOW_PLOTS:
+        plt.show()
+    plt.close("all")
+
+
 def main():
     df = load_and_prepare()
     X, y = split_xy(df)
@@ -130,6 +177,7 @@ def main():
 
     evaluate(pipe, X_test, y_test)
     show_top_features(pipe)
+    save_plots(pipe, X_test, y_test)
 
 
 if __name__ == "__main__":
