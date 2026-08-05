@@ -1,12 +1,11 @@
 """
-eda_bivariate.py — קשר בין הפיצ'רים ל-target (y).
+eda_bivariate.py — relationship between features and the target (y).
 
-זה השלב שאחרי ה-EDA הבסיסי: לא "מה יש בעמודה" אלא "איך העמודה מנבאת נרשמים".
-מודד:
-  - conversion rate לכל קטגוריה (אחוז y=yes) מול ה-baseline, כולל lift.
-  - התפלגות פיצ'רים מספריים מפוצלת לפי y (ממוצע/חציון בכל מחלקה).
+Goes beyond univariate EDA: shows how each feature predicts subscription.
+  - conversion rate (share of y=yes) per category vs baseline, incl. lift.
+  - numeric feature distributions split by y (mean/median per class).
 
-שימוש:
+Usage:
     python eda_bivariate.py
 """
 
@@ -24,10 +23,12 @@ pd.set_option("display.width", 120)
 
 
 def load() -> pd.DataFrame:
+    # UCI bank file is semicolon-separated
     return pd.read_csv(DATA_PATH, sep=";")
 
 
 def categorical_conversion(df: pd.DataFrame) -> None:
+    # Baseline positive rate across the whole dataset (~11%)
     baseline = (df[TARGET] == POSITIVE).mean()
     print("=" * 80)
     print(f"CONVERSION RATE BY CATEGORY   (baseline = {baseline*100:.2f}%)")
@@ -40,18 +41,20 @@ def categorical_conversion(df: pd.DataFrame) -> None:
     )
 
     for col in cat_cols:
+        # Per-category count and positive rate
         grp = df.groupby(col, observed=True)[TARGET].agg(
             n="count",
             conv_rate=lambda s: (s == POSITIVE).mean(),
         )
         grp["conv_pct"] = (grp["conv_rate"] * 100).round(2)
-        grp["lift_vs_base"] = (grp["conv_rate"] / baseline).round(2)
+        grp["lift_vs_base"] = (grp["conv_rate"] / baseline).round(2)  # >1 = above average
         grp = grp.drop(columns="conv_rate").sort_values("conv_pct", ascending=False)
         print(f"\n[{col}]")
         print(grp.to_string())
 
 
 def numeric_by_target(df: pd.DataFrame) -> None:
+    # Compare numeric feature central tendency between yes/no classes
     print("\n" + "=" * 80)
     print("NUMERIC FEATURES BY TARGET  (mean / median per class)")
     print("=" * 80)
@@ -64,10 +67,10 @@ def numeric_by_target(df: pd.DataFrame) -> None:
     summary = df.groupby(TARGET)[num_cols].agg(["mean", "median"]).T
     print(summary.to_string())
 
-    # רמז ל-leakage: פער עצום ב-duration בין המחלקות
+    # Big yes/no gap in 'duration' is a leakage red flag
     if "duration" in num_cols:
-        print("\n⚠️  שים לב ל-'duration' — פער גדול בין yes/no הוא סימן לדליפה. "
-              "להסיר לפני אימון מודל שמיועד לחיזוי אמיתי.")
+        print("\n⚠️  'duration' — a large gap between yes/no signals leakage. "
+              "Drop it before training a real predictive model.")
 
 
 def main():
