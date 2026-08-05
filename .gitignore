@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# EDA outputs
+eda_plots/
+eda_report.txt
+
+# OS / IDE
+.idea/
+.vscode/
+.DS_Store
